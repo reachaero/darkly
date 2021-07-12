@@ -1,25 +1,60 @@
-import logo from './logo.svg';
 import './App.css';
+import React from "react";
+import Webcam from "react-webcam";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const webcamRef = React.useRef(null);
+    const [imgSrc, setImgSrc] = React.useState(null);
+    const capture = React.useCallback(async () => {
+        const imgSrc = webcamRef.current.getScreenshot();
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ image: imgSrc })
+        };
+        if(!imgSrc) { return; };
+        const response = await fetch('http://192.168.0.22:8000/doOCR', requestOptions);
+        const res = await response.json();
+        setOcr(res.text);
+
+    }, [webcamRef]);
+
+
+    const videoConstraints = {
+        // facingMode: 'user',
+        facingMode: { exact: 'environment' }
+    };
+
+    const [ocr, setOcr] = React.useState('Recognizing...');
+        
+    return (
+        <>
+            <Webcam
+                class="video"
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+            />
+            <div class="bottom-wrapper">
+                <div class="scan-button-wrapper">
+                    <button class="scan-button" onClick={capture}>Scan</button>
+                </div>
+                <div class="feedback-wrapper">
+                    <p class="feedback">{ocr}</p>
+                </div>
+            </div>
+            {imgSrc && (
+                <img
+                    src={imgSrc}
+                />
+            )}
+        </>
+    );
 }
 
 export default App;

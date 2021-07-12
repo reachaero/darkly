@@ -28,6 +28,53 @@
   color: #61dafb;
 }
 
+#root {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content:center;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+.video {
+  z-index: -1;
+  position: absolute;
+  height: 100vh;
+}
+
+.bottom-wrapper {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+}
+
+.feedback {
+  font-size: 1.5em;
+}
+
+.scan-button-wrapper {
+  text-align: center;
+}
+
+.scan-button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-decoration: none;
+  font-size: 2em;
+  margin-bottom: 2em;
+}
+
+.feedback-wrapper {
+  text-align: center;
+  width: 100vw;
+  background-color: white;
+  opacity: 80%;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
