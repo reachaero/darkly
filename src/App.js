@@ -17,7 +17,7 @@ function App() {
             body: JSON.stringify({ image: imgSrc })
         };
         if(!imgSrc) { return; };
-        const response = await fetch(process.env.BACKEND_URI + '/doOCR', requestOptions);
+        const response = await fetch(process.env.REACT_APP_BACKEND_URI + '/doOCR', requestOptions);
         const res = await response.json();
         setOcr(res.text);
 
@@ -25,8 +25,8 @@ function App() {
 
 
     const videoConstraints = {
-        facingMode: 'user',
-        //facingMode: { exact: 'environment' }
+        // facingMode: 'user',
+        facingMode: { exact: 'environment' }
     };
 
     const [ocr, setOcr] = React.useState('Recognizing...');
