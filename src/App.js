@@ -1,10 +1,13 @@
 import './App.css';
 import React from "react";
 import Webcam from "react-webcam";
+import Barcode from "react-barcode";
 
 function App() {
     const webcamRef = React.useRef(null);
     const [imgSrc, setImgSrc] = React.useState(null);
+    const [name, setName] = React.useState(null);
+    const [barcode, setBarcode] = React.useState(null);
     const capture = React.useCallback(async () => {
         const imgSrc = webcamRef.current.getScreenshot();
 
@@ -19,13 +22,15 @@ function App() {
         if(!imgSrc) { return; };
         const response = await fetch(process.env.REACT_APP_BACKEND_URI + '/doOCR', requestOptions);
         const res = await response.json();
-        setOcr(res.text);
+        setName(res.name);
+        setBarcode(res.barcode);
+        setOcr(res.ocr);
 
     }, [webcamRef]);
 
 
     const videoConstraints = {
-        // facingMode: 'user',
+        //facingMode: 'user',
         facingMode: { exact: 'environment' }
     };
 
@@ -45,7 +50,14 @@ function App() {
                     <button class="scan-button" onClick={capture}>Scan</button>
                 </div>
                 <div class="feedback-wrapper">
+                    <p class="feedback">{name}</p>
                     <p class="feedback">{ocr}</p>
+                    {barcode && (
+                        <Barcode
+                            value={barcode}
+                            format="EAN13"
+                        />
+                    )}
                 </div>
             </div>
             {imgSrc && (
@@ -53,6 +65,7 @@ function App() {
                     src={imgSrc}
                 />
             )}
+
         </>
     );
 }
