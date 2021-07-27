@@ -17,7 +17,7 @@ function App() {
             body: JSON.stringify({ image: imgSrc })
         };
         if(!imgSrc) { return; };
-        const response = await fetch('https://scanner.quest:8000/doOCR', requestOptions);
+        const response = await fetch(process.env.REACT_APP_BACKEND_URI + '/doOCR', requestOptions);
         const res = await response.json();
         setOcr(res.text);
 
