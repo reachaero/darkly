@@ -22,8 +22,8 @@ function App() {
         if(!imgSrc) { return; };
         const response = await fetch(process.env.REACT_APP_BACKEND_URI + '/doOCR', requestOptions);
         const res = await response.json();
-        setName(res.name);
-        setBarcode(res.barcode);
+        setName(res.name_de);
+        setBarcode(res.nummer);
         setOcr(res.ocr);
 
     }, [webcamRef]);
@@ -52,10 +52,10 @@ function App() {
                 <div class="feedback-wrapper">
                     <p class="feedback">{name}</p>
                     <p class="feedback">{ocr}</p>
+                    <p class="feedback">{barcode}</p>
                     {barcode && (
                         <Barcode
                             value={barcode}
-                            format="EAN13"
                         />
                     )}
                 </div>
